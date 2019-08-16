@@ -154,4 +154,127 @@ typedef struct Struct_FILEATTRIBUTE {
 #define DEV_PRESENT_STATE   0x00000001
 #define DEV_UNKNOW_STATE    0x00000002
 
+// 函数原型的声明
+//等待设备拔插事件
+ULONG SKF_WaitForDevEvent(LPSTR szDevName, ULONG* pulDevNameLen, ULONG* pulEvent);
+
+// 取消等待设备拔插事件
+ULONG SKF_CancelWaitForDevEvent();
+
+// 枚举设备
+ULONG SKF_EnumDev(BOOL bPresent, LPSTR szNameList, ULONG* pulSize);
+
+// 连接设备
+ULONG SKF_ConnectDev(LPSTR szName, DEVHANDLE* phDev);
+
+// 断开连接
+ULONG SKF_DisConnectDev(DEVHANDLE hDev);
+
+// 获取设备状态
+ULONG SKF_GetDevState(LPSTR szDevName, ULONG* pulDevSize);
+
+// 设置设备标签
+ULONG SKF_SetLabel(DEVHANDLE hDev, LPSTR szLabel);
+
+// 获取设备信息
+ULONG SKF_GetDevInfo(DEVHANDLE hDev, DEVINFO* pDevInfo);
+
+// 锁定设备
+ULONG SKF_LockDev(DEVHANDLE hDev, ULONG ulTimeOut);
+
+// 解锁设备
+ULONG SKF_UnlockDev(DEVHANDLE hDev);
+
+// 设备命令传输
+ULONG SKF_Transmit(DEVHANDLE hDev, BYTE* pbCommand, ULONG ulCommandLen, BYTE* pbData, ULONG* pullDataLen);
+
+//************************访问控制相关函数*****************
+// 修改设备认证密钥
+ULONG SKF_ChangeDevAuthKey(DEVHANDLE hDev, BYTE* pbKeyValue, ULONG ulKeyLen);
+
+// 设备认证
+ULONG SKF_DevAuth(DEVHANDLE hDev, BYTE* pbAuthData, ULONG ulLen);
+
+// 修改PIN
+ULONG SKF_ChangePIN(HAPPLICATION hApplication, ULONG ulPINType, LPSTR szOldPin, LPSTR szNewPin, ULONG* pulRetryCount);
+
+// 获取PIN信息
+ULONG SKF_GetPINInfo(HAPPLICATION hApplication, ULONG ulPINType, ULONG* pulMaxRetryCount, ULONG* pulRetryCount, BOOL* pbDefaultPin);
+
+// 校验PIN
+ULONG SKF_VerifyPIN(HAPPLICATION hApplication, ULONG ulPINType, LPSTR szPIN, ULONG* pulRetryCount);
+
+// 解锁PIN
+ULONG SKF_UnblockPIN(HAPPLICATION hApplication, LPSTR szAdminPIN, LPSTR szNewUserPIN, ULONG* pulRetryCount);
+
+// 清除应用安全状态
+ULONG SKF_ClearSecureState(HAPPLICATION hApplication);
+
+//***********************应用管理函数*************************
+// 创建应用
+ULONG SKF_CreateApplication(DEVHANDLE hDev, LPSTR szAppName, LPSTR szAdminPin, DWORD dwAdminPinRetryCount, LPSTR szUserPin, DWORD dwUserPinRetryCount, DWORD dwCreateFileRights, HAPPLICATION* phApplication);
+
+// 枚举应用
+ULONG SKF_EnumApplication(DEVHANDLE hDev, LPSTR szAppName, ULONG* pulSize);
+
+// 删除应用
+ULONG SKF_DeleteApplication(DEVHANDLE hDev, LPSTR szAppName);
+
+// 打开应用
+ULONG SKF_OpenApplication(DEVHANDLE hDev, LPSTR szAppName, HAPPLICATION* phApplication);
+
+// 关闭应用
+ULONG SKF_CloseApplication(HAPPLICATION hApplication);
+
+//*********************文件管理***************************
+// 创建文件
+ULONG SKF_CreateFile(HAPPLICATION hApplication, LPSTR szFileName, ULONG ulFileSize, ULONG ulReadRights, ULONG ulWriteRights);
+
+// 删除文件
+ULONG SKF_DeleteFile(HAPPLICATION hApplication, LPSTR szFileName);
+
+// 枚举文件
+ULONG SKF_EnumFiles(HAPPLICATION hApplication, LPSTR szFileList, ULONG* pulSize);
+
+//获取文件属性
+ULONG SKF_GetFileInfo(HAPPLICATION hApplication, LPSTR szFileName, FILEATTRIBUTE* pFileInfo);
+
+// 读文件
+ULONG SKF_ReadFile(HAPPLICATION hApplication, LPSTR szFileName, ULONG ulOffset, ULONG ulSize, BYTE* pbOutData, ULONG* pulOutLen);
+
+// 写文件
+ULONG SKF_WriteFile(HAPPLICATION hApplication, LPSTR szFileName, ULONG ulOffset, BYTE* pbData, ULONG ulSize);
+
+// **********************容器概述********************
+// 创建容器
+ULONG SKF_CreateContainer(HAPPLICATION hApplication, LPSTR szContainerName, HCONTAINER* phContainer);
+
+// 删除容器
+ULONG SKF_DeleteContainer(HAPPLICATION hApplication, LPSTR szContainerName);
+
+// 打开容器
+ULONG SKF_OpenContainer(HAPPLICATION hApplication, LPSTR szContainerName, HCONTAINER* phContainer);
+
+// 关闭容器
+ULONG SKF_CloseContainer(HCONTAINER hContainer);
+
+// 获得容器类型
+ULONG SKF_GetContainerType(HCONTAINER hContainer, ULONG* pulContainerType);
+
+// 导入数字证书
+ULONG SKF_ImportCertificate(HCONTAINER hContainer, BOOL bSignFlag, BYTE* pbCert, ULONG ulCertLen);
+
+// 导出数字证书
+ULONG SKF_ExportCertificate(HCONTAINER hContainer, BOOL bSignFlag, BYTE* pbCert, ULONG* pulCertLen);
+
+//*************************密码服务*************************
+// 生成随机数
+ULONG SKF_GenRandom(DEVHANDLE hDev, BYTE* pbRandom, ULONG ulRandomLen);
+
+// 生成RSA签名密钥对
+ULONG SKF_GenRSAKeyPair(HCONTAINER hContainer, ULONG ulBitsLen, RSAPUBLICKEYBLOB* pBlob);
+
+// 导入RSA加密密钥对
+ULONG SKF_ImportRSAKeyPair(HCONTAINER hContainer, ULONG ulSymAlgId, BYTE* pbWrappedKey, ULONG ulWrppedKeyLen, BYTE* pbEncryptedData, ULONG ulEncryptedDataLen);
+
 #endif
