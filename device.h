@@ -278,6 +278,96 @@ ULONG SKF_GenRSAKeyPair(HCONTAINER hContainer, ULONG ulBitsLen, RSAPUBLICKEYBLOB
 ULONG SKF_ImportRSAKeyPair(HCONTAINER hContainer, ULONG ulSymAlgId, BYTE* pbWrappedKey, ULONG ulWrppedKeyLen, BYTE* pbEncryptedData, ULONG ulEncryptedDataLen);
 
 // RSA签名
-ULONG SKF_RSASignData()
+ULONG SKF_RSASignData(HCONTAINER hContainer, BYTE* pbData, ULONG ulDataLen, BYTE* pbSignature, ULONG* pulSignLen);
+
+// RSA验签
+ULONG SKF_RSAVerify(DEVHANDLE hDev, RSAPUBLICKEYBLOB* pRSAPubKeyBlob, BYTE* pbData, ULONG ulDataLen, BYTE* pbSignature, ULONGulSignLen);
+
+// RSA生成并导出会话密钥
+ULONG SKF_RSAExportSessionKey(HCONTAINER hContainer, ULONG ulAlgId, RSAPUBLICKEYBLOB* pPubKey, BYTE* pbData, ULONG* pulDataLen, HANDLE* phSessionKey);
+
+// 生成ECC签名密钥对
+ULONG SKF_GenECCKeyPair(HCONTAINER hContainer, ULONG ulAlgId, ECCPUBLICKEYBLOB* pBlob);
+
+// 导入ECC加密密钥对
+ULONG SKF_ImportEccKeyPair(HCONTAINER hContainer, PENVELOPEDKEYBLOB pEnvelopedKeyBlob);
+
+// ECC签名
+ULONG SKF_ECCSignData(HCONTAINER hContainer, BYTE* pbData, ULONG ulDataLen, PECCSIGNATUREBLOB pSignature);
+
+// ECC验签
+ULONG SKF_ECCVerify(DEVHANDLE hDev, ECCPUBLICKEYBLOB* pECCPubKeyBlob, BYTE* pbData, ULONG ulDataLen, PECCSIGNATUREBLOB pSignature);
+
+// ECC生成并导出会话密钥
+ULONG SKF_ECCExportSessionKey(HCONTAINER hContainer, ULONG ulAlgId, ECCPUBLICKEYBLOB* pPubKey, PECCCIPHERBLOB pData, HANDLE* phSessionKey);
+
+// ECC外来公钥加密
+ULONG SKF_ExtECCEncrypt(DEVHANDLE hDev, ECCPUBLICKEYBLOB* pECCPubKeyBlob, BYTE* pbPlainText, ULONG ulPlainTextLen, PECCCIPHERBLOB pCipherText);
+
+// ECC生成密钥协商参数并输出
+ULONG SKF_GenerateAgreementDataWithECC(HCONTAINER hContainer, ULONG ulAlgId, ECCPUBLICKEYBLOB* pTempECCPubKeyBlob, BYTE* pbID, ULONG ulIDLen, HANDLE* phAgreementHandle);
+
+//ECC产生协商数据并计算会话密钥
+ULONG SKF_GenerateAgreementDataAndKeyWithECC(HANDLE hContainer, ULONG ulAlgId, ECCPUBLICKEYBLOB* pSponsorECCPubKeyBlob, ECCPUBLICKEYBLOB* pSponsorTempECCPubKeyBlob, ECCPUBLICKEYBLOB* pTempECCPubKeyBlob, BYTE* pbID, ULONG ulIDLen, BYTE* pbSponsorID, ULONG ulSponsorIDLen, HANDLE* pbKeyHandle);
+
+// ECC计算会话密钥
+ULONG SKF_GenerateKeyWithECC(HANDLE hAgreementHandle, ECCPUBLICKEYBLOB* pECCPubKeyBlob, BYTE* pbID, ULONG ulIDLen, HANDLE* phKeyHandle);
+
+// 导出公钥
+ULONG  SKF_ExportPublicKey(HCONTAINER hContainer, BOOL bSignFlag, BYTE* pbBlob, ULONG* pulBlobLen);
+
+// 导入会话密钥
+ULONG  SKF_ImportSessionKey(HCONTAINER hContainer, ULONG ulAlgId, BYTE* pbWrapedData, ULONG ulWrapedLen, HANDLE* phKey);
+
+// 加密初始化
+ULONG  SKF_EncryptInit(HANDLE hKey, BLOCKCIPHERPARAM EncryptParam);
+
+// 单组数据加密
+ULONG  SKF_Encrypt(HANDLE hKey, BYTE* pbData, ULONG ulDataLen, BYTE* pbEncryptedData, ULONG* pulEncryptedLen);
+
+// 多组数据加密
+ULONG  SKF_EncryptUpdate(HANDLE hKey, BYTE* pbData, ULONG ulDataLen, BYTE* pbEncryptedData, ULONG* pulEncryptedLen);
+
+// 结束加密
+ULONG  SKF_EncryptFinal(HANDLE hKey, BYTE* pbEncryptedData, ULONG* ulEncryptedDataLen);
+
+// 解密初始化
+ULONG  SKF_DecryptInit(HANDLE hKey, BLOCKCIPHERPARAM DecryptParam);
+
+// 单组数据解密
+ULONG  SKF_Decrypt(HANDLE hKey, BYTE* pbEncryptedData,ULONG ulEncryptedLen, BYTE* pbData, ULONG* pulDataLen);
+
+// 多组数据解密
+ULONG  SKF_DecryptUpdate(HANDLE hKey, BYTE* pbEncryptedData, ULONG ulEncryptedLen,BYTE* pbData, ULONG* pulDataLen);
+
+// 结束解密
+ULONG  SKF_DecryptFinal(HANDLE hKey, BYTE* pbEncryptedData, ULONG* pulDecryptedDataLen);
+
+// 密码杂凑初始化
+ULONG  SKF_DigestInit(DEVHANDLE hDev, ULONG ulAlgId, ECCPUBLICKEYBLOB* pPubKey ,unsigned char* pucID,ULONG ulIDLen,HANDLE* phHash);
+
+// 单组数据密码杂凑
+ULONG  SKF_Digest(HANDLE hHash,BYTE* pbData, ULONG ulDataLen, BYTE* pbHashData, ULONG* pulHashLen);
+
+// 多组数据密码杂凑
+ULONG  SKF_DigestUpdate(HANDLE hHash, BYTE* pbData, ULONG ulDataLen);
+
+// 结束密码杂凑
+ULONG  SKF_DigestFinal(HANDLE hHash, BYTE* pHashData, ULONG* pulHashLen);
+
+// 消息鉴别码运算初始化
+ULONG  SKF_MacInit(HANDLE hKey, BLOCKCIPHERPARAM* pMacParam, HANDLE* phMac);
+
+// 单组数据消息鉴别码运算
+ULONG  SKF_Mac(HANDLE hMac, BYTE* pbData, ULONG ulDataLen, BYTE* pbMacData ,ULONG* pulMacLen);
+
+// 多组数据消息鉴别码运算
+ULONG  SKF_MacUpdate(HANDLE hMac, BYTE* pbData, ULONG ulDataLen);
+
+// 结束消息鉴别码运算
+ULONG  SKF_MacFinal(HANDLE hMac, BYTE* pbMacData, ULONG* pulMacDataLen);
+
+// 关闭密码对象句柄
+ULONG SKF_CloseHandle(HANDLE hHandle);
 
 #endif
