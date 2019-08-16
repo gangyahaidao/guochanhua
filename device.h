@@ -277,4 +277,7 @@ ULONG SKF_GenRSAKeyPair(HCONTAINER hContainer, ULONG ulBitsLen, RSAPUBLICKEYBLOB
 // 导入RSA加密密钥对
 ULONG SKF_ImportRSAKeyPair(HCONTAINER hContainer, ULONG ulSymAlgId, BYTE* pbWrappedKey, ULONG ulWrppedKeyLen, BYTE* pbEncryptedData, ULONG ulEncryptedDataLen);
 
+// RSA签名
+ULONG SKF_RSASignData()
+
 #endif
