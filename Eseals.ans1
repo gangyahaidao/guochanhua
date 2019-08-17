@@ -1,0 +1,40 @@
+SESeal ::= SEQUENCE {
+    esealInfo SES_SealInfo,
+    signInfo SES_SignInfo
+}
+
+SES_SealInfo::=SEQUENCE{
+    header  SES_Header,
+    esID    IA5String,
+    property    SES_ESPropertyInfo,
+    picture     SES_ESPictureInfo,
+    extDatas    EXPLICIT ExtensionDatas OPTIONAL
+}
+ExtensionDatas::=SEQUENCE SIZE (0..MAX) OF ExtData
+ExtData::=SEQUENCE{
+    extnID  OBJECT  IDENTIFIER,
+    critical    BOOLEAN DEFAULT FALSE,
+    extnValue   OCTET   STRING
+}
+
+SES_Header::=SEQUENCE{
+    ID  IA5String,
+    version INTEGER,
+    Vid IA5String
+}
+
+SES_ESPropertyInfo::=SEQUENCE{
+    type    INTEGER,
+    name    UTF8String,
+    certList    SEQUENCE    OF cert,
+    createDate  UTCTIME,
+    validStart  UTCTIME,
+    validEnd    UTCTIME
+}
+
+SES_ESPictureInfo::=SEQUENCE{
+    type    IA5String,
+    data    OCTET   STRING,
+    width   INTEGER,
+    height  INTEGER
+}
