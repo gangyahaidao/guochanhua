@@ -1,0 +1,7 @@
+TestModule0 DEFINITIONS ::= BEGIN -- Module parameters preamble
+    SESHeader ::= SEQUENCE {
+        id  IA5String,
+        version INTEGER,
+        vid IA5String
+    }
+END -- End of TestModule

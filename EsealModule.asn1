@@ -1,0 +1,51 @@
+EsealModule DEFINITIONS ::= BEGIN -- Module parameters preamble
+
+    --电子印章数据ASN.1定义
+    SESeal::=SEQUENCE{
+        esealInfo SES-SealInfo,
+        signInfo SES-SignInfo        
+    }
+
+    --印章信息
+    SES-SealInfo::=SEQUENCE{
+        header  SES-Header,
+        esID    IA5String,
+        property    SES-ESPropertyInfo,
+        picture     SES-ESPictureInfo
+        --自定义扩展字段，先去掉extDatas    EXPLICIT ExtensionDatas OPTIONAL
+    }
+    --印章头信息
+    SES-Header::=SEQUENCE{
+        id  IA5String DEFAULT "ES", --最终需要将大写改成小写
+        version INTEGER,
+        vid IA5String --最终需要将大写改成小写
+    }
+    --印章属性信息
+    Cert::=SEQUENCE{
+        cert    OCTET STRING
+    }
+    SES-ESPropertyInfo::=SEQUENCE{
+        type    INTEGER,
+        name    UTF8String,
+        certList    SEQUENCE OF Cert, --签章人证书列表
+        createDate  UTCTime,
+        validStart  UTCTime,
+        validEnd    UTCTime
+    }
+    --印章图片信息
+    SES-ESPictureInfo::=SEQUENCE{
+        type    IA5String,
+        data    OCTET STRING,
+        width   INTEGER,
+        height  INTEGER
+    }
+
+    --印章签名信息
+    SES-SignInfo::=SEQUENCE{
+        cert    Cert,
+        signatureAlgorithm  OBJECT IDENTIFIER,
+        signData    BIT STRING
+    }
+
+
+END -- End of TestModule
