@@ -8,9 +8,9 @@
 
 asn_TYPE_member_t asn_MBR_SES_SignInfo_1[] = {
 	{ ATF_NOFLAGS, 0, offsetof(struct SES_SignInfo, cert),
-		(ASN_TAG_CLASS_UNIVERSAL | (16 << 2)),
+		(ASN_TAG_CLASS_UNIVERSAL | (4 << 2)),
 		0,
-		&asn_DEF_Cert,
+		&asn_DEF_OCTET_STRING,
 		0,
 		{ 0, 0, 0 },
 		0, 0, /* No default value */
@@ -40,8 +40,8 @@ static const ber_tlv_tag_t asn_DEF_SES_SignInfo_tags_1[] = {
 };
 static const asn_TYPE_tag2member_t asn_MAP_SES_SignInfo_tag2el_1[] = {
     { (ASN_TAG_CLASS_UNIVERSAL | (3 << 2)), 2, 0, 0 }, /* signData */
-    { (ASN_TAG_CLASS_UNIVERSAL | (6 << 2)), 1, 0, 0 }, /* signatureAlgorithm */
-    { (ASN_TAG_CLASS_UNIVERSAL | (16 << 2)), 0, 0, 0 } /* cert */
+    { (ASN_TAG_CLASS_UNIVERSAL | (4 << 2)), 0, 0, 0 }, /* cert */
+    { (ASN_TAG_CLASS_UNIVERSAL | (6 << 2)), 1, 0, 0 } /* signatureAlgorithm */
 };
 asn_SEQUENCE_specifics_t asn_SPC_SES_SignInfo_specs_1 = {
 	sizeof(struct SES_SignInfo),

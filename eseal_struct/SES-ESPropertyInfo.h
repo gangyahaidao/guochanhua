@@ -14,6 +14,7 @@
 #include <NativeInteger.h>
 #include <UTF8String.h>
 #include <UTCTime.h>
+#include <OCTET_STRING.h>
 #include <asn_SEQUENCE_OF.h>
 #include <constr_SEQUENCE_OF.h>
 #include <constr_SEQUENCE.h>
@@ -22,15 +23,12 @@
 extern "C" {
 #endif
 
-/* Forward declarations */
-struct Cert;
-
 /* SES-ESPropertyInfo */
 typedef struct SES_ESPropertyInfo {
 	long	 type;
 	UTF8String_t	 name;
 	struct certList {
-		A_SEQUENCE_OF(struct Cert) list;
+		A_SEQUENCE_OF(OCTET_STRING_t) list;
 		
 		/* Context for parsing across buffer boundaries */
 		asn_struct_ctx_t _asn_ctx;
@@ -51,9 +49,6 @@ extern asn_TYPE_member_t asn_MBR_SES_ESPropertyInfo_1[6];
 #ifdef __cplusplus
 }
 #endif
-
-/* Referred external types */
-#include "Cert.h"
 
 #endif	/* _SES_ESPropertyInfo_H_ */
 #include <asn_internal.h>

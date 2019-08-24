@@ -21,13 +21,10 @@ EsealModule DEFINITIONS ::= BEGIN -- Module parameters preamble
         vid IA5String --最终需要将大写改成小写
     }
     --印章属性信息
-    Cert::=SEQUENCE{
-        cert    OCTET STRING
-    }
     SES-ESPropertyInfo::=SEQUENCE{
         type    INTEGER,
         name    UTF8String,
-        certList    SEQUENCE OF Cert, --签章人证书列表
+        certList    SEQUENCE OF OCTET STRING, --签章人证书列表
         createDate  UTCTime,
         validStart  UTCTime,
         validEnd    UTCTime
@@ -42,7 +39,7 @@ EsealModule DEFINITIONS ::= BEGIN -- Module parameters preamble
 
     --印章签名信息
     SES-SignInfo::=SEQUENCE{
-        cert    Cert,
+        cert    OCTET STRING,
         signatureAlgorithm  OBJECT IDENTIFIER,
         signData    BIT STRING
     }

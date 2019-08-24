@@ -2,7 +2,6 @@ ASN_MODULE_SRCS=	\
 	SESeal.c	\
 	SES-SealInfo.c	\
 	SES-Header.c	\
-	Cert.c	\
 	SES-ESPropertyInfo.c	\
 	SES-ESPictureInfo.c	\
 	SES-SignInfo.c
@@ -11,7 +10,6 @@ ASN_MODULE_HDRS=	\
 	SESeal.h	\
 	SES-SealInfo.h	\
 	SES-Header.h	\
-	Cert.h	\
 	SES-ESPropertyInfo.h	\
 	SES-ESPictureInfo.h	\
 	SES-SignInfo.h

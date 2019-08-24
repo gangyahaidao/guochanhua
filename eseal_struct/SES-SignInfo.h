@@ -11,7 +11,7 @@
 #include <asn_application.h>
 
 /* Including external dependencies */
-#include "Cert.h"
+#include <OCTET_STRING.h>
 #include <OBJECT_IDENTIFIER.h>
 #include <BIT_STRING.h>
 #include <constr_SEQUENCE.h>
@@ -22,7 +22,7 @@ extern "C" {
 
 /* SES-SignInfo */
 typedef struct SES_SignInfo {
-	Cert_t	 cert;
+	OCTET_STRING_t	 cert;
 	OBJECT_IDENTIFIER_t	 signatureAlgorithm;
 	BIT_STRING_t	 signData;
 	

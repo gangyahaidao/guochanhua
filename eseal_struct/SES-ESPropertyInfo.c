@@ -8,9 +8,9 @@
 
 static asn_TYPE_member_t asn_MBR_certList_4[] = {
 	{ ATF_POINTER, 0, 0,
-		(ASN_TAG_CLASS_UNIVERSAL | (16 << 2)),
+		(ASN_TAG_CLASS_UNIVERSAL | (4 << 2)),
 		0,
-		&asn_DEF_Cert,
+		&asn_DEF_OCTET_STRING,
 		0,
 		{ 0, 0, 0 },
 		0, 0, /* No default value */

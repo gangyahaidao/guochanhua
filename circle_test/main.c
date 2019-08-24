@@ -6,8 +6,8 @@ int encode(int ac, char **av);
 int decode(int ac, char **av);
 
 int main(int argc, char* argv[]) {
-    return encode(argc, argv);
-    //return decode(argc, argv);
+    //return encode(argc, argv);
+    return decode(argc, argv);
 }
 
 /* Write the encoded output into some FILE stream. */
