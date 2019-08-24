@@ -31,10 +31,11 @@ static void checkUTC2Time(char *time_str, time_t sample, int as_gmt) {
 		GMTOFF(tm)
 	);
 }
-static void checkTime2UT(struct tm* tm) {
-    UTCTime_t output;
-    asn_time2UT(&output, tm, 0);
-    printf("output = %s\n", output.buf);
+UTCTime_t* checkTime2UT(struct tm* tm) {
+    static UTCTime_t output;
+    UTCTime_t* ret = asn_time2UT(&output, tm, 0);
+    printf("output = %s\n", ret->buf);
+    return ret;
 }
 
 
@@ -47,7 +48,7 @@ int main(int argc, char* argv[]) {
     struct tm * tmp_localtime = localtime(&lt);
     checkTime2UT(tmp_localtime);
 
-    //return encode(argc, argv);
+    return encode(argc, argv);
     //return decode(argc, argv);
 }
 
@@ -72,7 +73,9 @@ int encode(int ac, char **av) {
     char* esID = "SEAL-10000000-CSDC";
     eseal->esealInfo.esID.buf = esID;
     eseal->esealInfo.esID.size = strlen(esID);
+    printf("填充1.1信息\n");
     //1.2 填充印章头信息
+    eseal->esealInfo.header.id = calloc(1, sizeof(IA5String_t)); // 头信息ID分配空间
     char* headerID = "ES";
     eseal->esealInfo.header.id->buf = headerID;
     eseal->esealInfo.header.id->size = strlen(headerID);
@@ -81,6 +84,7 @@ int encode(int ac, char **av) {
     char* headerVid = "电子印章平台";
     eseal->esealInfo.header.vid.buf = headerVid;
     eseal->esealInfo.header.vid.size = strlen(headerVid);
+    printf("填充1.2信息\n");
     // 1.3填充印章属性信息
     int infoType = 2;
     eseal->esealInfo.property.type = infoType;
@@ -88,15 +92,19 @@ int encode(int ac, char **av) {
     eseal->esealInfo.property.name.buf = infoName;
     eseal->esealInfo.property.name.size = strlen(infoName);
 
-    //eseal->esealInfo.property.certList.list.
+    OCTET_STRING_t userCert;
+    char* userCertStr = "MIIElDCCA3ygAwIBAgIKZEpPCQAAAABmHTANBgkqhki";
+    userCert.buf = userCertStr;
+    userCert.size = strlen(userCertStr);    
+    ASN_SEQUENCE_ADD(&(eseal->esealInfo.property.certList.list), &userCert); //增加了一个证书
 
     time_t lt = time(NULL);
-    struct tm * tmp_localtime = localtime(&lt);
-    UTCTime_t createDate;
-    asn_time2UT(&createDate, tmp_localtime, 0);
-    eseal->esealInfo.property.createDate = createDate;
-    eseal->esealInfo.property.validStart = createDate;
-    eseal->esealInfo.property.validEnd = createDate;
+    struct tm* tmp_localtime = localtime(&lt);
+    UTCTime_t* utcRet = checkTime2UT(tmp_localtime);
+    eseal->esealInfo.property.createDate = *utcRet; // 填充印章创建的时间
+    eseal->esealInfo.property.validStart = *utcRet;
+    eseal->esealInfo.property.validEnd = *utcRet;
+    printf("填充1.3信息\n");
 
     // 1.4填充印章图片信息
     char* picType = "png";
@@ -107,13 +115,19 @@ int encode(int ac, char **av) {
     eseal->esealInfo.picture.data.size = strlen(picData);
     eseal->esealInfo.picture.width = 248;
     eseal->esealInfo.picture.height = 248;
+    printf("填充1.4信息\n");
 
     // 1.5填充印章签名信息
     char* makeSealCert = "MIIEJjCCAw6gAwIBAgIKFfs";
     eseal->signInfo.cert.buf = makeSealCert;
     eseal->signInfo.cert.size = strlen(makeSealCert);
-
-
+    char* signType = "1.2.156.10197.1.501";
+    eseal->signInfo.signatureAlgorithm.buf = signType;
+    eseal->signInfo.signatureAlgorithm.size = strlen(signType);
+    char* sealVerifyMsg= "MIIFPwYJKoZIhvcNAQcCoIIFMDCCBSwCAQExDzANBgkqh";
+    eseal->signInfo.signData.buf = sealVerifyMsg;
+    eseal->signInfo.signData.size = strlen(sealVerifyMsg);
+    printf("填充1.5信息\n");
     
     /* BER encode the data if filename is given */
     if(ac < 2) {

@@ -9,7 +9,7 @@ typedef int32_t     INT32;
 typedef uint8_t     UINT8;
 typedef uint16_t    UINT16;
 typedef uint32_t    UINT32;
-typedef bool        BOOL;
+typedef unsigned char       BOOL;
 
 typedef UINT8       BYTE;
 typedef UINT8       CHAR;
@@ -32,6 +32,11 @@ typedef HANDLE      HCONTAINER;
 #define DEVAPI  _stdcall
 #define ADMIN_TYPE  0
 #define USER_TYPE   1
+
+//  接口函数返回值
+#define SAR_OK 0x00000000
+#define ASR_FAIL 0x0A000001
+#define ASR_UNKNOWNERR 0x0A000002
 
 // 符合类型数据的定义
 
@@ -281,7 +286,7 @@ ULONG SKF_ImportRSAKeyPair(HCONTAINER hContainer, ULONG ulSymAlgId, BYTE* pbWrap
 ULONG SKF_RSASignData(HCONTAINER hContainer, BYTE* pbData, ULONG ulDataLen, BYTE* pbSignature, ULONG* pulSignLen);
 
 // RSA验签
-ULONG SKF_RSAVerify(DEVHANDLE hDev, RSAPUBLICKEYBLOB* pRSAPubKeyBlob, BYTE* pbData, ULONG ulDataLen, BYTE* pbSignature, ULONGulSignLen);
+ULONG SKF_RSAVerify(DEVHANDLE hDev, RSAPUBLICKEYBLOB* pRSAPubKeyBlob, BYTE* pbData, ULONG ulDataLen, BYTE* pbSignature, ULONG ulSignLen);
 
 // RSA生成并导出会话密钥
 ULONG SKF_RSAExportSessionKey(HCONTAINER hContainer, ULONG ulAlgId, RSAPUBLICKEYBLOB* pPubKey, BYTE* pbData, ULONG* pulDataLen, HANDLE* phSessionKey);

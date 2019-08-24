@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "type_traits": "cpp",
-        "seseal.h": "c"
+        "seseal.h": "c",
+        "device.h": "c"
     }
 }
