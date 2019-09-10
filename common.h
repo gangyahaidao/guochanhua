@@ -32,7 +32,6 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <sys/types.h>
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>

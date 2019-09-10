@@ -1,0 +1,18 @@
+TestModule0 DEFINITIONS ::= BEGIN -- Module parameters preamble
+    SESHeader ::= SEQUENCE {
+        id  IA5String,
+        version INTEGER,
+        vid IA5String
+    }
+END -- End of TestModule
+
+TestModule DEFINITIONS ::= BEGIN -- Module parameters preamble
+    IMPORTS SESHeader FROM TestModule0;
+
+    Circle ::= SEQUENCE { -- Definition of Circle type
+        header  SESHeader,
+        position-x INTEGER, -- Integer position
+        position-y INTEGER, -- Position along Y-axis
+        radius INTEGER (0..MAX) -- Positive radius
+    } -- End of Circle type
+END -- End of TestModule
